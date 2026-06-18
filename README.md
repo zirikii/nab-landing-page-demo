@@ -19,14 +19,29 @@ Then open the printed URL (e.g. http://localhost:8080).
 ## Structure
 
 ```
-index.html                 Full page markup (header, hero, sections, footer)
+index.html                 Home page (hero, sections, promos)
+bank.html                  Bank accounts (transaction, savings, term deposits)
+home-loans.html            Borrow (home loans, personal loans, calculators)
+credit-cards.html          Credit cards (rewards, low rate, low fee)
+insurance.html             Insurance (home, car, life, travel)
+international.html          International (transfers, FX, moving to Australia)
+business.html              Business banking (accounts, loans, payments)
+about.html                 About us (careers, newsroom, sustainability)
+help-support.html          Help & support (assistance, security, FAQs)
+contact.html               Contact us (contacts, find a branch, phone numbers)
 css/styles.css             NAB red theme, typography, cards, responsive grid
+js/partials.js             Shared header, mobile menu and footer (injected per page)
 js/main.js                 Mega-menu, mobile nav, search, login, accordions
 js/datalayer.js            ACDL integration (page-load + click events)
 js/vendor/                 Vendored @adobe/adobe-client-data-layer library
 assets/logos/              NAB logo (SVG), app icon, award badge, interpreter icon
 assets/images/             Hero / banner / article imagery
 ```
+
+All pages share the same header and footer via `js/partials.js`, which renders
+the chrome into `#site-header-root` / `#site-footer-root` placeholders. Set
+`<body data-page="...">` to highlight the active nav section. These are static,
+public-facing pages only; no banking functionality is implemented.
 
 ## Data layer
 
