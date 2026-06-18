@@ -149,6 +149,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .main-nav__btn:hover { color: var(--nab-red); text-decoration: none; }
 .main-nav__item.is-open .main-nav__btn { color: var(--nab-red); border-bottom-color: var(--nab-red); }
+.main-nav__item.is-active .main-nav__btn { border-bottom-color: var(--nab-red); }
 .chev { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform 0.2s; }
 .main-nav__item.is-open .chev { transform: rotate(180deg); }
 
