@@ -8,6 +8,11 @@
   const overlay = document.getElementById("megaOverlay");
   const navItems = Array.from(document.querySelectorAll(".main-nav__item[data-menu]"));
   const isMobile = () => window.matchMedia("(max-width: 880px)").matches;
+  const copyrightYear = document.getElementById("copyrightYear");
+
+  if (copyrightYear) {
+    copyrightYear.textContent = String(new Date().getFullYear());
+  }
 
   function pushClick(id, label) {
     if (window.NabDataLayer) {
