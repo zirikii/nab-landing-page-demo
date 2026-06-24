@@ -5,7 +5,9 @@ import { mobileNav, mobileOffers } from "../data/site.js";
 // Reproduces the slide-in mobile menu (templates/header.html + js/main.js).
 // Shown <=880px. Controlled by `open`; `onClose` closes it.
 export default function MobileMenu({ open, onClose, audience }) {
-  const [expanded, setExpanded] = useState(null);
+  // Each group toggles independently (multiple can be open), matching js/main.js.
+  const [openGroups, setOpenGroups] = useState({});
+  const toggle = (i) => setOpenGroups((g) => ({ ...g, [i]: !g[i] }));
 
   return (
     <div
@@ -46,7 +48,7 @@ export default function MobileMenu({ open, onClose, audience }) {
         <div className="flex-1 overflow-y-auto flex flex-col">
           <nav aria-label="Mobile navigation">
             {mobileNav.map((group, i) => {
-              const isOpen = expanded === i;
+              const isOpen = !!openGroups[i];
               const active = group.audience && group.audience === audience;
               return (
                 <div
@@ -58,7 +60,7 @@ export default function MobileMenu({ open, onClose, audience }) {
                   <button
                     className="w-full flex items-center justify-between font-bold text-[1.05rem] text-white bg-none border-none cursor-pointer py-[19px] px-[22px] text-left"
                     aria-expanded={isOpen}
-                    onClick={() => setExpanded(isOpen ? null : i)}
+                    onClick={() => toggle(i)}
                   >
                     {group.label}
                     <span className="relative w-5 h-5 flex-none" aria-hidden="true">
@@ -70,7 +72,9 @@ export default function MobileMenu({ open, onClose, audience }) {
                       />
                     </span>
                   </button>
-                  <div className="px-[22px] pb-[14px] flex flex-col gap-0.5" hidden={!isOpen}>
+                  {/* Conditional flex/hidden (not the [hidden] attr) because a
+                      Tailwind display utility would override [hidden]. */}
+                  <div className={`px-[22px] pb-[14px] flex-col gap-0.5 ${isOpen ? "flex" : "hidden"}`}>
                     {group.links.map((l, j) => (
                       <SmartLink
                         key={j}
