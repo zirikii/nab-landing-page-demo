@@ -305,6 +305,274 @@ function renderSitemap(section) {
     </section>`;
 }
 
+function renderRateTable(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const cols = section.columns
+    .map((c, i) => `<th${i === 0 ? "" : ' class="num"'}>${esc(c)}</th>`)
+    .join("");
+  const rows = section.rows
+    .map(
+      (row) =>
+        `<tr>${row
+          .map((cell, i) =>
+            i === 0
+              ? `<th scope="row">${esc(cell)}</th>`
+              : `<td class="num">${esc(cell)}</td>`
+          )
+          .join("")}</tr>`
+    )
+    .join("");
+  const note = section.note ? `<p class="data-note">${esc(section.note)}</p>` : "";
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "rate-table"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr>${cols}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${note}
+      </div>
+    </section>`;
+}
+
+function renderProductCards(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const cards = section.cards
+    .map((card) => {
+      const badge = card.badge
+        ? `<span class="product-card__badge">${esc(card.badge)}</span>`
+        : "";
+      const features = card.features
+        ? `<ul class="product-card__features">${card.features
+            .map((f) => `<li>${esc(f)}</li>`)
+            .join("")}</ul>`
+        : "";
+      const stats = (card.stats || [])
+        .map(
+          (s) =>
+            `<div class="product-card__stat"><span class="product-card__stat-value">${esc(s.value)}</span><span class="product-card__stat-label">${esc(s.label)}</span></div>`
+        )
+        .join("");
+      const cta = card.cta
+        ? btn(card.cta.href, card.cta.label, card.cta.variant || "primary")
+        : "";
+      return `
+          <article class="product-card">
+            ${badge}
+            <h3 class="product-card__title">${esc(card.name)}</h3>
+            ${card.text ? `<p class="product-card__text">${esc(card.text)}</p>` : ""}
+            ${stats ? `<div class="product-card__stats">${stats}</div>` : ""}
+            ${features}
+            ${cta ? `<div class="product-card__cta">${cta}</div>` : ""}
+          </article>`;
+    })
+    .join("");
+  const cols = section.cols || Math.min(section.cards.length, 3);
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "products"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="grid grid--${cols}">
+          ${cards}
+        </div>
+        ${section.note ? `<p class="data-note">${esc(section.note)}</p>` : ""}
+      </div>
+    </section>`;
+}
+
+function renderStats(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (s) =>
+        `<div class="stat"><span class="stat__value">${esc(s.value)}</span><span class="stat__label">${esc(s.label)}</span></div>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "stats"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="stats-row stats-row--${section.items.length}">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderNewsList(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (n) => `
+          <article class="news-item">
+            <div class="news-item__meta">
+              <time>${esc(n.date)}</time>
+              ${n.category ? `<span class="news-item__cat">${esc(n.category)}</span>` : ""}
+            </div>
+            <h3 class="news-item__title"><a href="${n.href || "#"}">${esc(n.title)}</a></h3>
+            <p>${esc(n.excerpt)}</p>
+          </article>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "news"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="news-list">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderAlertList(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (a) => `
+          <article class="alert-item alert-item--${a.level || "warning"}">
+            <div class="alert-item__head">
+              <span class="alert-item__tag">${esc(a.tag || "Scam alert")}</span>
+              <time>${esc(a.date)}</time>
+            </div>
+            <h3 class="alert-item__title">${esc(a.title)}</h3>
+            <p>${esc(a.text)}</p>
+          </article>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "alerts"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="alert-list">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFxTable(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const rows = section.rows
+    .map(
+      (r) => `
+          <tr>
+            <th scope="row"><span class="fx-code">${esc(r.code)}</span> ${esc(r.name)}</th>
+            <td class="num">${esc(r.buy)}</td>
+            <td class="num">${esc(r.sell)}</td>
+          </tr>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "fx"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="data-table-wrap">
+          <table class="data-table fx-table">
+            <thead>
+              <tr>
+                <th>Currency (1 ${esc(section.base || "AUD")} buys)</th>
+                <th class="num">We buy</th>
+                <th class="num">We sell</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        ${section.note ? `<p class="data-note">${esc(section.note)}</p>` : ""}
+      </div>
+    </section>`;
+}
+
+function renderBranchList(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (b) => `
+          <article class="branch-card">
+            <h3 class="branch-card__title">${esc(b.name)}</h3>
+            <p class="branch-card__addr">${esc(b.address)}</p>
+            <p class="branch-card__hours"><strong>Hours:</strong> ${esc(b.hours)}</p>
+            ${
+              b.services
+                ? `<ul class="branch-card__services">${b.services
+                    .map((s) => `<li>${esc(s)}</li>`)
+                    .join("")}</ul>`
+                : ""
+            }
+            ${b.phone ? `<p class="branch-card__phone">${esc(b.phone)}</p>` : ""}
+          </article>`
+    )
+    .join("");
+  const cols = section.cols || 3;
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "branches"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="grid grid--${cols}">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderJobsList(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (j) => `
+          <article class="job-item">
+            <div class="job-item__body">
+              <h3 class="job-item__title"><a href="#">${esc(j.title)}</a></h3>
+              <p class="job-item__meta">${esc(j.team)} &middot; ${esc(j.location)} &middot; ${esc(j.type)}</p>
+            </div>
+            <span class="job-item__date">${esc(j.posted)}</span>
+          </article>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "jobs"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="jobs-list">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFaq(section) {
+  const tint = section.tint ? " section--tint" : "";
+  const items = section.items
+    .map(
+      (f, i) => `
+          <div class="accordion__item">
+            <h3 class="accordion__header">
+              <button class="accordion__btn" aria-expanded="false" aria-controls="faq-${section.id || "x"}-${i}">
+                ${esc(f.q)}
+                <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+              </button>
+            </h3>
+            <div class="accordion__panel" id="faq-${section.id || "x"}-${i}" hidden>
+              <p>${esc(f.a)}</p>
+            </div>
+          </div>`
+    )
+    .join("");
+  return `
+    <section class="section${tint}" data-dl-component="${section.id || "faq"}">
+      <div class="container">
+        ${section.head ? renderSectionHead(section.head) : ""}
+        <div class="accordion">
+          ${items}
+        </div>
+      </div>
+    </section>`;
+}
+
 function renderSections(sections) {
   return (sections || [])
     .map((section) => {
@@ -329,6 +597,24 @@ function renderSections(sections) {
           return renderWayCards(section);
         case "awards":
           return renderAwards(section);
+        case "rate-table":
+          return renderRateTable(section);
+        case "product-cards":
+          return renderProductCards(section);
+        case "stats":
+          return renderStats(section);
+        case "news-list":
+          return renderNewsList(section);
+        case "alert-list":
+          return renderAlertList(section);
+        case "fx-table":
+          return renderFxTable(section);
+        case "branch-list":
+          return renderBranchList(section);
+        case "jobs-list":
+          return renderJobsList(section);
+        case "faq":
+          return renderFaq(section);
         case "sitemap":
           return renderSitemap(section);
         default:

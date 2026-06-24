@@ -204,6 +204,16 @@ const pages = [
         text: "We're proud to be recognised for our banking services, products and digital innovations including WeMoney Bank of the Year 2025.",
       },
       {
+        type: "stats",
+        id: "by-the-numbers",
+        items: [
+          { value: "8.5m+", label: "Customers" },
+          { value: "5m+", label: "NAB app users" },
+          { value: "600+", label: "Branches & centres" },
+          { value: "1858", label: "Serving Australia since" },
+        ],
+      },
+      {
         type: "articles",
         id: "security",
         head: {
@@ -522,6 +532,18 @@ const pages = [
           "Filter by services such as coin deposit, foreign exchange and accessibility features.",
         ],
       },
+      {
+        type: "branch-list",
+        head: { title: "Branches near you", lede: "Showing results for Melbourne VIC 3000" },
+        items: [
+          { name: "NAB Melbourne CBD", address: "330 Collins Street, Melbourne VIC 3000", hours: "Mon-Fri 9:30am - 4:00pm", phone: "13 22 65", services: ["ATM", "Coin deposit", "Foreign exchange", "Wheelchair access"] },
+          { name: "NAB Bourke Street", address: "271 Bourke Street, Melbourne VIC 3000", hours: "Mon-Fri 9:30am - 5:00pm", phone: "13 22 65", services: ["ATM", "Business banking", "Wheelchair access"] },
+          { name: "NAB Southbank", address: "3 Southgate Avenue, Southbank VIC 3006", hours: "Mon-Fri 9:30am - 4:00pm", phone: "13 22 65", services: ["ATM", "Coin deposit", "Hearing loop"] },
+          { name: "NAB Docklands", address: "800 Bourke Street, Docklands VIC 3008", hours: "Mon-Fri 9:00am - 5:00pm", phone: "13 22 65", services: ["ATM", "Business banking", "Foreign exchange"] },
+          { name: "NAB Carlton", address: "242 Lygon Street, Carlton VIC 3053", hours: "Mon-Fri 9:30am - 4:00pm", phone: "13 22 65", services: ["ATM", "Wheelchair access"] },
+          { name: "NAB South Yarra", address: "175 Toorak Road, South Yarra VIC 3141", hours: "Mon-Fri 9:30am - 4:00pm", phone: "13 22 65", services: ["ATM", "Coin deposit", "Wheelchair access"] },
+        ],
+      },
       relatedLinks("Related", [
         { title: "Contact us", more: { href: P.contact, label: "Contact us" } },
         { title: "Help & support", more: { href: P.help, label: "Get help" } },
@@ -572,7 +594,45 @@ const pages = [
     sections: [
       hubHero("Transaction accounts", "Simple everyday banking with 24/7 access through the NAB app.", "Bank accounts"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Bank accounts", href: P.bankAccounts }, { label: "Transaction accounts" }] },
-      { type: "content", paragraphs: ["Compare NAB transaction accounts with no monthly account fees on select products.", "Open an account online in minutes and start banking straight away."] },
+      {
+        type: "product-cards",
+        head: { title: "Compare transaction accounts", lede: "No monthly account fees on our everyday accounts. Open online in around 10 minutes." },
+        cards: [
+          {
+            name: "NAB Classic Banking",
+            badge: "Most popular",
+            stats: [{ value: "$0", label: "Monthly fee" }, { value: "$0", label: "NAB ATM fee" }],
+            features: ["No monthly account fees", "Free NAB ATM withdrawals Australia-wide", "Apple Pay, Google Pay and Samsung Pay", "Instant transfers with Osko by BPAY"],
+            cta: { href: P.nabApp, label: "Open account" },
+          },
+          {
+            name: "NAB Classic Banking with Platinum Visa Debit",
+            stats: [{ value: "$10", label: "Monthly fee" }, { value: "$0", label: "Overseas ATM fee" }],
+            features: ["No NAB international transaction fees", "Complimentary overseas travel insurance", "Unlimited free withdrawals worldwide", "Priority customer support"],
+            cta: { href: P.nabApp, label: "Open account", variant: "secondary" },
+          },
+          {
+            name: "NAB Retirement Account",
+            stats: [{ value: "$0", label: "Monthly fee" }, { value: "1.50%", label: "p.a. interest" }],
+            features: ["For customers receiving a pension", "No monthly account fees", "Earn interest on your balance", "Unlimited NAB ATM withdrawals"],
+            cta: { href: P.nabApp, label: "Open account", variant: "secondary" },
+          },
+        ],
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Fees at a glance" },
+        columns: ["Fee type", "NAB Classic Banking", "Platinum Visa Debit"],
+        rows: [
+          ["Monthly account fee", "$0", "$10"],
+          ["NAB ATM withdrawal", "$0", "$0"],
+          ["Overseas ATM withdrawal", "$5.00", "$0"],
+          ["International transaction fee", "3% of value", "$0"],
+          ["Replacement card", "$0", "$0"],
+        ],
+        note: "Fees shown are indicative for this educational recreation and do not reflect NAB's current pricing.",
+      },
       { type: "promo-banner", image: "assets/images/hero.jpg", title: "Open an account today", text: "Get started with everyday banking that works as hard as you do.", cta: { href: P.nabApp, label: "Get the NAB app" } },
     ],
   },
@@ -584,7 +644,44 @@ const pages = [
     sections: [
       hubHero("Savings accounts", "Put savings where they belong and manage your money with confidence.", "Bank accounts", "assets/images/savings-banner.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Bank accounts", href: P.bankAccounts }, { label: "Savings accounts" }] },
-      { type: "content", paragraphs: ["Compare NAB savings accounts and find one that fits your goals.", "Set up automatic transfers and track your progress in the NAB app."] },
+      {
+        type: "product-cards",
+        head: { title: "Compare savings accounts", lede: "Grow your savings with bonus interest when you meet a few simple conditions." },
+        cards: [
+          {
+            name: "NAB Reward Saver",
+            badge: "Bonus interest",
+            stats: [{ value: "5.00%", label: "p.a. max rate" }, { value: "0.35%", label: "p.a. base rate" }],
+            features: ["Bonus interest when you grow your balance each month", "No monthly account fees", "No minimum opening deposit", "Manage savings goals in the NAB app"],
+            cta: { href: P.nabApp, label: "Open Reward Saver" },
+          },
+          {
+            name: "NAB iSaver",
+            stats: [{ value: "4.50%", label: "p.a. intro rate" }, { value: "0.35%", label: "p.a. standard" }],
+            features: ["Introductory bonus rate for 4 months", "Instant access to your money", "Link to your everyday account", "No monthly account fees"],
+            cta: { href: P.nabApp, label: "Open iSaver", variant: "secondary" },
+          },
+          {
+            name: "NAB Junior Saver",
+            stats: [{ value: "3.50%", label: "p.a. interest" }, { value: "$0", label: "Monthly fee" }],
+            features: ["For savers under 18", "No monthly account fees", "Help kids build savings habits", "No minimum balance"],
+            cta: { href: P.nabApp, label: "Open Junior Saver", variant: "secondary" },
+          },
+        ],
+        note: "Interest rates are illustrative for this educational recreation only.",
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Reward Saver interest rates" },
+        columns: ["Balance tier", "Base rate", "Bonus rate", "Total rate"],
+        rows: [
+          ["$0 - $99,999", "0.35% p.a.", "4.65% p.a.", "5.00% p.a."],
+          ["$100,000 - $499,999", "0.35% p.a.", "4.40% p.a.", "4.75% p.a."],
+          ["$500,000+", "0.35% p.a.", "4.15% p.a.", "4.50% p.a."],
+        ],
+        note: "Bonus interest applies in months where your closing balance is higher than the previous month (excluding interest).",
+      },
     ],
   },
   {
@@ -595,6 +692,30 @@ const pages = [
     sections: [
       hubHero("Term deposits", "Earn a fixed rate of interest for a set term.", "Bank accounts"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Bank accounts", href: P.bankAccounts }, { label: "Term deposits" }] },
+      {
+        type: "rate-table",
+        head: { title: "Term deposit rates", lede: "Lock in a fixed rate from a $5,000 minimum deposit. Interest paid at maturity." },
+        columns: ["Term", "Interest at maturity", "Interest paid monthly"],
+        rows: [
+          ["3 months", "4.20% p.a.", "4.10% p.a."],
+          ["6 months", "4.65% p.a.", "4.55% p.a."],
+          ["9 months", "4.55% p.a.", "4.45% p.a."],
+          ["12 months", "4.80% p.a.", "4.70% p.a."],
+          ["24 months", "4.40% p.a.", "4.30% p.a."],
+          ["36 months", "4.25% p.a.", "4.15% p.a."],
+        ],
+        note: "Rates current as at 1 June 2026 and are indicative for this educational recreation. Minimum deposit $5,000.",
+      },
+      {
+        type: "stats",
+        tint: true,
+        items: [
+          { value: "$5,000", label: "Minimum deposit" },
+          { value: "4.80%", label: "p.a. best rate (12 mth)" },
+          { value: "1-60", label: "Months available" },
+          { value: "31 days", label: "Notice to withdraw early" },
+        ],
+      },
       { type: "content", paragraphs: ["Choose a term that suits you and lock in your rate.", "Term deposits can be a straightforward way to grow savings with certainty."] },
     ],
   },
@@ -652,6 +773,29 @@ const pages = [
     sections: [
       hubHero("Home loans", "Whether you're buying, refinancing or investing, we're here to help.", "Borrow", "assets/images/refinance.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Home loans" }] },
+      {
+        type: "rate-table",
+        head: { title: "Home loan interest rates", lede: "Rates for owner-occupiers paying principal and interest." },
+        columns: ["Loan", "Interest rate", "Comparison rate"],
+        rows: [
+          ["Tailored Home Loan - Variable", "6.44% p.a.", "6.79% p.a."],
+          ["Base Variable Rate Home Loan", "6.09% p.a.", "6.13% p.a."],
+          ["Tailored Fixed - 1 year", "5.94% p.a.", "6.71% p.a."],
+          ["Tailored Fixed - 2 years", "5.79% p.a.", "6.58% p.a."],
+          ["Tailored Fixed - 3 years", "5.84% p.a.", "6.49% p.a."],
+        ],
+        note: "Comparison rate based on a $150,000 loan over 25 years. Rates are illustrative for this educational recreation. WARNING: This comparison rate is true only for the example given and may not include all fees and charges.",
+      },
+      {
+        type: "stats",
+        tint: true,
+        items: [
+          { value: "5.79%", label: "p.a. lowest fixed rate" },
+          { value: "95%", label: "Max loan-to-value ratio" },
+          { value: "$0", label: "Redraw fee online" },
+          { value: "24/7", label: "Application tracking" },
+        ],
+      },
       relatedLinks("Home loan solutions", [
         { title: "Buying a home", more: { href: P.buyingHome, label: "Get started" } },
         { title: "Refinancing", more: { href: P.refinancing, label: "Learn more" } },
@@ -690,6 +834,27 @@ const pages = [
     sections: [
       hubHero("Refinancing made simple", "Get clarity on your refinance with a quick, no-pressure chat with a home loan expert.", "Home loans", "assets/images/refinance.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Home loans", href: P.homeLoans }, { label: "Refinancing" }] },
+      {
+        type: "stats",
+        items: [
+          { value: "$2,140", label: "Avg. yearly saving*" },
+          { value: "6.09%", label: "p.a. variable from" },
+          { value: "21 days", label: "Avg. time to switch" },
+          { value: "$0", label: "Application fee" },
+        ],
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Could refinancing save you money?", lede: "Example based on a $500,000 loan over 25 years, principal and interest." },
+        columns: ["Scenario", "Rate", "Monthly repayment", "Cost over 5 years"],
+        rows: [
+          ["Your current loan", "6.89% p.a.", "$3,489", "$209,340"],
+          ["NAB Base Variable", "6.09% p.a.", "$3,243", "$194,580"],
+          ["You could save", "0.80% p.a.", "$246 / month", "$14,760"],
+        ],
+        note: "*Illustrative figures for this educational recreation only. Actual savings depend on your circumstances, loan balance and rate.",
+      },
       { type: "content", paragraphs: ["Understand your equity, offset benefits and whether refinancing could save you money.", "Book a chat with a specialist at a time that suits you."] },
     ],
   },
@@ -745,7 +910,32 @@ const pages = [
     sections: [
       hubHero("Personal loans", "Flexible lending for life's bigger purchases and plans.", "Borrow"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Personal loans" }] },
-      { type: "content", paragraphs: ["Compare fixed and variable rate personal loans.", "Apply online and get a response quickly — funds could be in your account soon after approval."] },
+      {
+        type: "product-cards",
+        head: { title: "Compare personal loans", lede: "Borrow from $5,000 to $55,000 with terms from 1 to 7 years." },
+        cards: [
+          {
+            name: "NAB Personal Loan - Fixed",
+            badge: "Rate certainty",
+            stats: [{ value: "6.99%", label: "p.a. from" }, { value: "7.91%", label: "comparison rate" }],
+            features: ["Fixed repayments for your whole term", "Borrow $5,000 - $55,000", "Terms 1 - 7 years", "No early repayment penalty"],
+            cta: { href: P.borrowingPower, label: "Check your rate" },
+          },
+          {
+            name: "NAB Personal Loan - Variable",
+            stats: [{ value: "7.49%", label: "p.a. from" }, { value: "8.39%", label: "comparison rate" }],
+            features: ["Make extra repayments any time", "Free redraw on extra repayments", "Borrow $5,000 - $55,000", "Flexible weekly, fortnightly or monthly repayments"],
+            cta: { href: P.borrowingPower, label: "Check your rate", variant: "secondary" },
+          },
+          {
+            name: "NAB Car Loan",
+            stats: [{ value: "6.49%", label: "p.a. from" }, { value: "7.36%", label: "comparison rate" }],
+            features: ["Lower rate for eligible vehicles", "Borrow up to $130,000", "New and used cars up to 7 years old", "Fast online application"],
+            cta: { href: P.borrowingPower, label: "Check your rate", variant: "secondary" },
+          },
+        ],
+        note: "Comparison rate based on a $30,000 unsecured loan over 5 years. Rates illustrative for this educational recreation.",
+      },
     ],
   },
 
@@ -758,6 +948,34 @@ const pages = [
     sections: [
       hubHero("Credit cards", "Find a card that rewards your everyday spend or keeps interest low.", "Credit cards"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Credit cards" }] },
+      {
+        type: "product-cards",
+        head: { title: "Compare credit cards", lede: "Find a card to suit your spending — from rewards to low rates." },
+        cards: [
+          {
+            name: "NAB Qantas Rewards Signature",
+            badge: "120,000 bonus points",
+            stats: [{ value: "19.99%", label: "p.a. purchase rate" }, { value: "$295", label: "Annual fee" }],
+            features: ["Up to 120,000 bonus Qantas Points", "1.25 Qantas Points per $1 spent", "Complimentary travel insurance", "2 Qantas Club lounge passes"],
+            cta: { href: P.qantas, label: "View card" },
+          },
+          {
+            name: "NAB Low Rate Card",
+            badge: "0% balance transfer",
+            stats: [{ value: "12.49%", label: "p.a. purchase rate" }, { value: "$59", label: "Annual fee" }],
+            features: ["0% p.a. on balance transfers for 28 months", "Low ongoing purchase rate", "Up to 55 interest-free days", "Instant digital card in the NAB app"],
+            cta: { href: P.lowRate, label: "View card", variant: "secondary" },
+          },
+          {
+            name: "NAB StraightUp Card",
+            badge: "No interest",
+            stats: [{ value: "$0", label: "Interest charged" }, { value: "$10", label: "Monthly fee*" }],
+            features: ["No interest, ever", "Simple flat monthly fee", "$1,000, $2,000 or $3,000 credit limit", "$0 monthly fee in months you don't use it"],
+            cta: { href: P.chooseCard, label: "View card", variant: "secondary" },
+          },
+        ],
+        note: "*Monthly fee reversed in any statement period with no spend and no outstanding balance. Rates and fees illustrative for this educational recreation.",
+      },
       relatedLinks("Explore cards", [
         { title: "Latest offers", more: { href: P.latestOffers, label: "View offers" } },
         { title: "Help me choose", more: { href: P.chooseCard, label: "Find your card" } },
@@ -774,7 +992,34 @@ const pages = [
     sections: [
       hubHero("Latest offers", "Discover current credit card promotions and bonus point offers.", "Credit cards"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Credit cards", href: P.creditCards }, { label: "Latest offers" }] },
-      { type: "content", paragraphs: ["Browse our latest credit card offers including balance transfer deals and bonus Qantas Points.", "Offers are subject to terms and conditions and may change without notice."] },
+      {
+        type: "product-cards",
+        head: { title: "Current credit card offers", lede: "Limited-time offers available when you apply and are approved by 30 September 2026." },
+        cards: [
+          {
+            name: "120,000 bonus Qantas Points",
+            badge: "Ends 30 Sep 2026",
+            text: "On the NAB Qantas Rewards Signature card.",
+            features: ["80,000 points when you spend $4,000 in 60 days", "Extra 40,000 points when you keep the card 12 months", "Annual fee $295"],
+            cta: { href: P.qantas, label: "Get this offer" },
+          },
+          {
+            name: "0% for 28 months on balance transfers",
+            badge: "Popular",
+            text: "On the NAB Low Rate card.",
+            features: ["0% p.a. balance transfer for 28 months", "2% balance transfer fee applies", "Reverts to 21.74% p.a. after period"],
+            cta: { href: P.lowRate, label: "Get this offer", variant: "secondary" },
+          },
+          {
+            name: "$200 back on the NAB Rewards Platinum",
+            badge: "New",
+            text: "Spend and earn rewards plus cashback.",
+            features: ["$200 cashback when you spend $1,500 in 90 days", "100,000 bonus NAB Rewards Points", "First-year annual fee waived"],
+            cta: { href: P.chooseCard, label: "Get this offer", variant: "secondary" },
+          },
+        ],
+        note: "Offers are illustrative for this educational recreation and subject to terms, conditions, fees and eligibility criteria.",
+      },
     ],
   },
   {
@@ -796,6 +1041,30 @@ const pages = [
     sections: [
       hubHero("Qantas Rewards cards", "Earn Qantas Points on your everyday spend.", "Credit cards"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Credit cards", href: P.creditCards }, { label: "Qantas Rewards" }] },
+      {
+        type: "rate-table",
+        head: { title: "Compare Qantas Rewards cards" },
+        columns: ["Feature", "Qantas Rewards Premium", "Qantas Rewards Signature"],
+        rows: [
+          ["Bonus Qantas Points", "70,000", "120,000"],
+          ["Points per $1 spent", "0.66", "1.25"],
+          ["Annual fee", "$150", "$295"],
+          ["Purchase rate", "19.99% p.a.", "19.99% p.a."],
+          ["Complimentary travel insurance", "No", "Yes"],
+          ["Qantas Club lounge passes", "0", "2 per year"],
+        ],
+        note: "Points earning and fees illustrative for this educational recreation only.",
+      },
+      {
+        type: "stats",
+        tint: true,
+        items: [
+          { value: "120,000", label: "Bonus points on offer" },
+          { value: "1.25", label: "Points per $1 spent" },
+          { value: "2", label: "Lounge passes a year" },
+          { value: "55", label: "Interest-free days" },
+        ],
+      },
       { type: "content", paragraphs: ["Turn groceries, fuel and bills into Qantas Points.", "Redeem points for flights, upgrades and more with Qantas Frequent Flyer."] },
     ],
   },
@@ -807,6 +1076,20 @@ const pages = [
     sections: [
       hubHero("Low rate cards", "Keep interest costs down with a low rate credit card.", "Credit cards"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Credit cards", href: P.creditCards }, { label: "Low rate cards" }] },
+      {
+        type: "rate-table",
+        head: { title: "Low rate card comparison" },
+        columns: ["Feature", "NAB Low Rate Card", "NAB Low Fee Card"],
+        rows: [
+          ["Purchase rate", "12.49% p.a.", "16.99% p.a."],
+          ["Balance transfer offer", "0% for 28 months", "0% for 12 months"],
+          ["Annual fee", "$59", "$30"],
+          ["Cash advance rate", "21.74% p.a.", "21.74% p.a."],
+          ["Minimum credit limit", "$1,000", "$1,000"],
+          ["Interest-free days", "Up to 55", "Up to 44"],
+        ],
+        note: "Rates and fees illustrative for this educational recreation only.",
+      },
       { type: "content", paragraphs: ["Compare low rate cards if you sometimes carry a balance.", "A lower purchase rate can help reduce interest charges over time."] },
     ],
   },
@@ -869,6 +1152,32 @@ const pages = [
     sections: [
       hubHero("Home & contents insurance", "Protect your home and the things that make it yours.", "Insurance"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Insurance", href: P.insurance }, { label: "Home & contents" }] },
+      {
+        type: "product-cards",
+        head: { title: "Choose your cover", lede: "Flexible cover for your building, your contents, or both." },
+        cards: [
+          {
+            name: "Building cover",
+            stats: [{ value: "$18/wk", label: "from*" }],
+            features: ["Rebuild or repair after insured events", "Fire, storm and flood cover", "Temporary accommodation costs", "$20m legal liability"],
+            cta: { href: P.makeClaim, label: "Get a quote" },
+          },
+          {
+            name: "Contents cover",
+            stats: [{ value: "$12/wk", label: "from*" }],
+            features: ["Cover for furniture and belongings", "Accidental damage option", "Portable contents away from home", "New-for-old replacement"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+          {
+            name: "Building + contents",
+            badge: "Save 10%",
+            stats: [{ value: "$27/wk", label: "from*" }],
+            features: ["Combine cover and save", "One excess for a single event", "Single renewal to manage", "24/7 claims support"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+        ],
+        note: "*Premiums are illustrative for this educational recreation and depend on your address, sum insured and excess.",
+      },
       { type: "content", paragraphs: ["Cover your building, contents or both with flexible options.", "Get a quote online in minutes."] },
     ],
   },
@@ -880,6 +1189,20 @@ const pages = [
     sections: [
       hubHero("Car insurance", "Cover for your car with flexible levels of protection.", "Insurance"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Insurance", href: P.insurance }, { label: "Car insurance" }] },
+      {
+        type: "rate-table",
+        head: { title: "Compare levels of cover" },
+        columns: ["Feature", "Comprehensive", "Third Party F&T", "Third Party"],
+        rows: [
+          ["Damage to your car", "Yes", "Theft & fire only", "No"],
+          ["Damage to other vehicles", "Yes", "Yes", "Yes"],
+          ["Theft of your car", "Yes", "Yes", "No"],
+          ["Choice of repairer", "Yes", "No", "No"],
+          ["Hire car after theft", "Yes", "No", "No"],
+          ["From (per month)", "$72*", "$41*", "$28*"],
+        ],
+        note: "*Premiums illustrative for this educational recreation and depend on your vehicle, driving history and location.",
+      },
       { type: "content", paragraphs: ["Choose comprehensive, third party fire & theft or third party property cover.", "Customise your excess and optional extras to suit your needs."] },
     ],
   },
@@ -891,6 +1214,31 @@ const pages = [
     sections: [
       hubHero("Life insurance", "Help protect the people who matter most.", "Insurance"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Insurance", href: P.insurance }, { label: "Life insurance" }] },
+      {
+        type: "product-cards",
+        head: { title: "Types of life cover", lede: "Protect your family's financial future with cover that suits your stage of life." },
+        cards: [
+          {
+            name: "Life Cover",
+            stats: [{ value: "$1.5m", label: "max benefit" }],
+            features: ["Lump sum if you pass away", "Terminal illness benefit", "Cover from $100,000", "Premiums from $0.60/day*"],
+            cta: { href: P.makeClaim, label: "Get a quote" },
+          },
+          {
+            name: "Total & Permanent Disability",
+            stats: [{ value: "$1m", label: "max benefit" }],
+            features: ["Lump sum if you can't work again", "Helps cover medical and living costs", "Can be added to Life Cover", "Choice of any or own occupation"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+          {
+            name: "Income Protection",
+            stats: [{ value: "70%", label: "of income covered" }],
+            features: ["Monthly benefit if illness or injury stops you working", "Cover up to 70% of your income", "Choice of waiting periods", "Premiums may be tax deductible"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+        ],
+        note: "*Premiums illustrative for this educational recreation and depend on age, cover amount and health.",
+      },
       { type: "content", paragraphs: ["Life cover can provide a lump sum if you pass away or are diagnosed with a terminal illness.", "Speak with us about cover that fits your circumstances."] },
     ],
   },
@@ -902,6 +1250,33 @@ const pages = [
     sections: [
       hubHero("Travel insurance", "Cover for medical emergencies, cancellations and lost luggage.", "Insurance", "assets/images/travel.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Insurance", href: P.insurance }, { label: "Travel insurance" }] },
+      {
+        type: "product-cards",
+        head: { title: "Travel cover options", lede: "Single trip or annual multi-trip cover for domestic and international travel." },
+        cards: [
+          {
+            name: "International Comprehensive",
+            badge: "Most cover",
+            stats: [{ value: "Unlimited", label: "Overseas medical" }],
+            features: ["Unlimited overseas medical & dental", "Trip cancellation up to $15,000", "Luggage cover up to $10,000", "Rental vehicle excess cover"],
+            cta: { href: P.makeClaim, label: "Get a quote" },
+          },
+          {
+            name: "Domestic",
+            stats: [{ value: "$10,000", label: "Cancellation cover" }],
+            features: ["Trip cancellation and delays", "Luggage and personal effects", "Rental vehicle excess", "24/7 emergency assistance"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+          {
+            name: "Annual Multi-Trip",
+            badge: "Frequent travellers",
+            stats: [{ value: "365", label: "Days of cover" }],
+            features: ["Unlimited trips up to 45 days each", "Cover for the whole family", "Unlimited overseas medical", "Best value for 3+ trips a year"],
+            cta: { href: P.makeClaim, label: "Get a quote", variant: "secondary" },
+          },
+        ],
+        note: "Cover and limits illustrative for this educational recreation. Consider the Product Disclosure Statement before deciding.",
+      },
       { type: "content", paragraphs: ["Get cover for overseas and domestic travel.", "Pair with our travel hub for tips on managing money abroad."] },
     ],
   },
@@ -962,6 +1337,32 @@ const pages = [
     sections: [
       hubHero("Business loans", "Finance to start, grow or manage your business.", "Business", "assets/images/sme-ai.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Business", href: P.business }, { label: "Business loans" }] },
+      {
+        type: "product-cards",
+        head: { title: "Business lending options", lede: "Finance to manage cashflow, invest in equipment or fund growth." },
+        cards: [
+          {
+            name: "NAB Business Options Loan",
+            stats: [{ value: "7.29%", label: "p.a. variable from" }],
+            features: ["Fixed or variable rates", "Borrow from $20,000", "Flexible repayment options", "Redraw available"],
+            cta: { href: P.business, label: "Enquire now" },
+          },
+          {
+            name: "NAB QuickBiz Loan",
+            badge: "Fast online",
+            stats: [{ value: "Same day", label: "Decision*" }],
+            features: ["Unsecured loans up to $250,000", "Apply online in 15 minutes", "No asset security required", "Funds in as little as one business day"],
+            cta: { href: P.business, label: "Apply online", variant: "secondary" },
+          },
+          {
+            name: "Equipment Finance",
+            stats: [{ value: "100%", label: "Asset value funded" }],
+            features: ["Finance vehicles, plant and machinery", "Chattel mortgage or lease", "Potential tax benefits", "Fixed repayments"],
+            cta: { href: P.business, label: "Enquire now", variant: "secondary" },
+          },
+        ],
+        note: "*Subject to eligibility and credit assessment. Rates illustrative for this educational recreation only.",
+      },
       { type: "content", paragraphs: ["From overdrafts to term loans and equipment finance.", "Speak with a business banker about the right structure for your needs."] },
     ],
   },
@@ -973,6 +1374,32 @@ const pages = [
     sections: [
       hubHero("Merchant & payments", "Accept payments in-store, online and on the go.", "Business"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Business", href: P.business }, { label: "Merchant & payments" }] },
+      {
+        type: "product-cards",
+        head: { title: "Ways to take payments", lede: "Accept card payments in-store, online and on the go." },
+        cards: [
+          {
+            name: "NAB EFTPOS Now",
+            badge: "Popular",
+            stats: [{ value: "$0", label: "for 3 months*" }, { value: "1.10%", label: "transaction fee" }],
+            features: ["All-in-one Android terminal", "Next business day settlement", "Accepts tap, chip and mobile wallets", "Built-in receipts and reporting"],
+            cta: { href: P.business, label: "Get started" },
+          },
+          {
+            name: "NAB Easy Tap",
+            stats: [{ value: "1.40%", label: "transaction fee" }],
+            features: ["Turn your phone into a payment terminal", "No extra hardware needed", "Accept contactless payments", "Great for sole traders"],
+            cta: { href: P.business, label: "Get started", variant: "secondary" },
+          },
+          {
+            name: "Online payments gateway",
+            stats: [{ value: "1.50%", label: "+ 30c per txn" }],
+            features: ["Accept payments on your website", "Hosted checkout and API", "Fraud screening included", "Integrates with major platforms"],
+            cta: { href: P.eftpos, label: "Learn more", variant: "secondary" },
+          },
+        ],
+        note: "*Terminal rental waived for the first 3 months. Fees illustrative for this educational recreation only.",
+      },
       { type: "content", paragraphs: ["Terminal solutions, online payments and integrated POS systems.", "Get paid faster with settlement options that suit your business."] },
     ],
   },
@@ -1041,6 +1468,19 @@ const pages = [
     sections: [
       hubHero("NAB Trade", "Trade shares and manage your portfolio online.", "Corporate"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "NAB Trade" }] },
+      {
+        type: "rate-table",
+        head: { title: "Brokerage and pricing" },
+        columns: ["Trade type", "Brokerage", "Settlement"],
+        rows: [
+          ["ASX trades up to $5,000", "$9.95", "T+2"],
+          ["ASX trades up to $20,000", "$14.95", "T+2"],
+          ["ASX trades over $20,000", "0.11% of value", "T+2"],
+          ["US shares", "US$9.95", "T+2"],
+          ["Watchlists & research", "Free", "-"],
+        ],
+        note: "Brokerage figures illustrative for this educational recreation only.",
+      },
       { type: "content", paragraphs: ["Research tools, live prices and portfolio tracking.", "Trade Australian and international shares from one platform."] },
     ],
   },
@@ -1065,6 +1505,27 @@ const pages = [
     sections: [
       hubHero("Careers at NAB", "Join a team that's more than money.", "About us"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Careers" }] },
+      {
+        type: "stats",
+        items: [
+          { value: "38,000+", label: "Employees" },
+          { value: "1,200+", label: "Open roles" },
+          { value: "4.2/5", label: "Employee rating" },
+          { value: "50%", label: "Women in leadership" },
+        ],
+      },
+      {
+        type: "jobs-list",
+        head: { title: "Featured opportunities" },
+        items: [
+          { title: "Senior Software Engineer", team: "Digital & Technology", location: "Melbourne VIC", type: "Full time", posted: "Posted 2 days ago" },
+          { title: "Personal Banker", team: "Retail Banking", location: "Sydney NSW", type: "Full time", posted: "Posted 4 days ago" },
+          { title: "Data Scientist - Fraud", team: "Financial Crime", location: "Melbourne VIC", type: "Full time", posted: "Posted 1 week ago" },
+          { title: "Business Banking Associate", team: "Business & Private Banking", location: "Brisbane QLD", type: "Full time", posted: "Posted 1 week ago" },
+          { title: "Customer Service Consultant", team: "Contact Centre", location: "Adelaide SA", type: "Part time", posted: "Posted 2 weeks ago" },
+          { title: "Product Manager - Home Lending", team: "Product", location: "Melbourne VIC", type: "Full time", posted: "Posted 2 weeks ago" },
+        ],
+      },
       { type: "content", paragraphs: ["Explore roles across banking, technology, risk and customer service.", "We're committed to inclusion, flexibility and developing our people."] },
     ],
   },
@@ -1076,7 +1537,17 @@ const pages = [
     sections: [
       hubHero("Newsroom", "Latest news, media releases and announcements.", "About us"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Newsroom" }] },
-      { type: "content", paragraphs: ["Read the latest updates from NAB including product launches and community initiatives.", "Media enquiries can be directed through our press office."] },
+      {
+        type: "news-list",
+        head: { title: "Latest news" },
+        items: [
+          { date: "12 June 2026", category: "Media release", title: "NAB cuts variable home loan rates by 0.25%", excerpt: "Following the latest cash rate decision, NAB has reduced its standard variable home loan rate, passing on the full cut to customers." },
+          { date: "5 June 2026", category: "Technology", title: "NAB app reaches 5 million active users", excerpt: "The NAB app has surpassed five million monthly active users, with in-app scam protection features driving record engagement." },
+          { date: "28 May 2026", category: "Community", title: "NAB Foundation commits $10m to disaster recovery", excerpt: "New funding will support communities rebuilding after recent flooding across Queensland and New South Wales." },
+          { date: "19 May 2026", category: "Business", title: "Small business confidence rises for third straight quarter", excerpt: "The latest NAB Business Survey shows improving conditions for SMEs as cost pressures begin to ease." },
+          { date: "8 May 2026", category: "Security", title: "NAB blocks $80m in scam payments in 2026", excerpt: "Investment in real-time payment monitoring has helped prevent millions of dollars in scam losses for customers." },
+        ],
+      },
     ],
   },
   {
@@ -1087,6 +1558,28 @@ const pages = [
     sections: [
       hubHero("Shareholder centre", "Dividends, annual reports and shareholder information.", "About us"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Shareholder centre" }] },
+      {
+        type: "stats",
+        items: [
+          { value: "$38.42", label: "Share price (ASX: NAB)" },
+          { value: "+1.24%", label: "Today's change" },
+          { value: "85c", label: "Interim dividend" },
+          { value: "100%", label: "Franked" },
+        ],
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Dividend history" },
+        columns: ["Period", "Dividend", "Franking", "Payment date"],
+        rows: [
+          ["2026 Interim", "85c", "100%", "3 July 2026"],
+          ["2025 Final", "84c", "100%", "18 Dec 2025"],
+          ["2025 Interim", "84c", "100%", "2 July 2025"],
+          ["2024 Final", "84c", "100%", "19 Dec 2024"],
+        ],
+        note: "Share price and dividend figures are illustrative for this educational recreation only and are not live market data.",
+      },
       { type: "content", paragraphs: ["Access annual reports, dividend history and AGM information.", "Manage your shareholding and communication preferences online."] },
     ],
   },
@@ -1098,6 +1591,15 @@ const pages = [
     sections: [
       hubHero("Sustainability", "Banking responsibly for people, communities and the planet.", "About us"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Sustainability" }] },
+      {
+        type: "stats",
+        items: [
+          { value: "2050", label: "Net zero target" },
+          { value: "$80bn", label: "Sustainable finance by 2030" },
+          { value: "100%", label: "Renewable electricity" },
+          { value: "$70m+", label: "Community investment 2026" },
+        ],
+      },
       { type: "content", paragraphs: ["Learn about our climate strategy, community investment and governance.", "We publish regular sustainability reporting and targets."] },
     ],
   },
@@ -1194,6 +1696,16 @@ const pages = [
     sections: [
       hubHero("Fraud alerts", "Latest scams and phishing activity to watch out for.", "Security", "assets/images/sme-ai.jpg"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Fraud alerts" }] },
+      {
+        type: "alert-list",
+        head: { title: "Recent scam and fraud alerts" },
+        items: [
+          { date: "15 June 2026", tag: "Scam alert", level: "high", title: "Fake 'NAB security' text messages", text: "Scammers are sending texts claiming your account is locked and asking you to verify via a link. NAB will never ask you to log in via a link in an SMS. Delete and report to hoax@nab.com.au." },
+          { date: "9 June 2026", tag: "Phishing", level: "warning", title: "Bogus invoice emails targeting businesses", text: "Fraudulent emails impersonating suppliers are requesting payment to new bank details. Always verify account changes by calling a known contact." },
+          { date: "2 June 2026", tag: "Investment scam", level: "high", title: "Fake high-return investment platforms", text: "Be wary of social media ads promising guaranteed returns. Check the ASIC list of companies you should not deal with before investing." },
+          { date: "24 May 2026", tag: "Remote access", level: "warning", title: "Callers pretending to be tech support", text: "Never give remote access to your device to an unexpected caller. Hang up and call the organisation back on a number you trust." },
+        ],
+      },
       { type: "content", paragraphs: ["We publish alerts when new scams targeting NAB customers emerge.", "If you receive a suspicious message, don't click links — report it to us."] },
     ],
   },
@@ -1249,6 +1761,21 @@ const pages = [
     sections: [
       hubHero("Foreign exchange calculator", "Convert currencies using current indicative exchange rates.", "Tools"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "FX calculator" }] },
+      {
+        type: "fx-table",
+        base: "AUD",
+        head: { title: "Today's indicative exchange rates", lede: "Foreign exchange rates as at 9:00am AEST, 1 June 2026." },
+        rows: [
+          { code: "USD", name: "US Dollar", buy: "0.6612", sell: "0.6498" },
+          { code: "EUR", name: "Euro", buy: "0.6105", sell: "0.5994" },
+          { code: "GBP", name: "British Pound", buy: "0.5187", sell: "0.5081" },
+          { code: "JPY", name: "Japanese Yen", buy: "103.42", sell: "100.18" },
+          { code: "NZD", name: "New Zealand Dollar", buy: "1.0834", sell: "1.0612" },
+          { code: "SGD", name: "Singapore Dollar", buy: "0.8921", sell: "0.8743" },
+          { code: "THB", name: "Thai Baht", buy: "23.86", sell: "23.05" },
+        ],
+        note: "Rates are indicative for this educational recreation only and change throughout the day. Actual rates depend on transaction type and amount.",
+      },
       { type: "content", paragraphs: ["Enter an amount and select currencies to see an indicative conversion.", "Rates shown are a guide — actual rates may differ at the time of transaction."] },
     ],
   },
@@ -1279,7 +1806,55 @@ const pages = [
     sections: [
       hubHero("Interest rates and fees", "Current rates and fees for personal banking products.", "Rates"),
       { type: "breadcrumb", items: [{ label: "Home", href: P.home }, { label: "Interest rates and fees" }] },
-      { type: "content", paragraphs: ["Compare home loan, savings, term deposit and personal loan rates.", "Fees and charges are listed alongside each product for transparency."] },
+      { type: "content", paragraphs: ["Current interest rates and fees for NAB personal banking products, updated 1 June 2026.", "All rates below are illustrative for this educational recreation and do not reflect NAB's current pricing."] },
+      {
+        type: "rate-table",
+        head: { title: "Home loan rates" },
+        columns: ["Product", "Interest rate", "Comparison rate"],
+        rows: [
+          ["Tailored Home Loan - Variable (P&I)", "6.44% p.a.", "6.79% p.a."],
+          ["Base Variable Rate Home Loan (P&I)", "6.09% p.a.", "6.13% p.a."],
+          ["Tailored Fixed - 2 years (P&I)", "5.79% p.a.", "6.58% p.a."],
+          ["Tailored Fixed - 3 years (P&I)", "5.84% p.a.", "6.49% p.a."],
+        ],
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Savings & deposit rates" },
+        columns: ["Product", "Base rate", "Max rate"],
+        rows: [
+          ["NAB Reward Saver", "0.35% p.a.", "5.00% p.a."],
+          ["NAB iSaver", "0.35% p.a.", "4.50% p.a."],
+          ["Term Deposit - 6 months", "4.65% p.a.", "4.65% p.a."],
+          ["Term Deposit - 12 months", "4.80% p.a.", "4.80% p.a."],
+        ],
+      },
+      {
+        type: "rate-table",
+        head: { title: "Credit card & personal loan rates" },
+        columns: ["Product", "Interest rate", "Annual / monthly fee"],
+        rows: [
+          ["NAB Low Rate Card", "12.49% p.a.", "$59 p.a."],
+          ["NAB Qantas Rewards Signature", "19.99% p.a.", "$295 p.a."],
+          ["NAB StraightUp Card", "0% (no interest)", "up to $10/month"],
+          ["NAB Personal Loan - Fixed", "6.99% p.a.", "$0"],
+        ],
+        note: "Cash advance rate of 21.74% p.a. applies to all credit cards. Figures illustrative only.",
+      },
+      {
+        type: "rate-table",
+        tint: true,
+        head: { title: "Common account fees" },
+        columns: ["Fee", "Amount"],
+        rows: [
+          ["Monthly account fee (Classic Banking)", "$0"],
+          ["Overseas ATM withdrawal", "$5.00"],
+          ["International transaction fee", "3% of value"],
+          ["Replacement card", "$0"],
+          ["Dishonour fee", "$0"],
+        ],
+      },
     ],
   },
 
