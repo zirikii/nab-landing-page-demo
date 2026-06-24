@@ -146,51 +146,77 @@ async function runWalkthrough() {
   try {
     console.log("Starting walkthrough at", url);
 
-    // Home page + mega menu
+    async function scrollThrough(slug, scrolls = 2) {
+      await page.goto(url + "/" + slug);
+      await page.waitForLoadState("networkidle");
+      await pause(page, 700);
+      for (let i = 1; i <= scrolls; i++) {
+        await page.evaluate(
+          (f) => window.scrollTo({ top: document.body.scrollHeight * f, behavior: "smooth" }),
+          (i / (scrolls + 1))
+        );
+        await pause(page, 900);
+      }
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+      await pause(page, 500);
+    }
+
+    // Home page + mega menu (with by-the-numbers stats)
     await page.goto(url + "/index.html");
     await page.waitForLoadState("networkidle");
-    await pause(page, 1200);
-    await page.locator('.main-nav__item[data-menu="bank"] .main-nav__btn').hover();
     await pause(page, 1000);
+    await page.locator('.main-nav__item[data-menu="bank"] .main-nav__btn').hover();
+    await pause(page, 900);
     await page.locator('#mega-bank a[href="savings-accounts.html"]').first().click();
     await page.waitForLoadState("networkidle");
-    await pause(page, 1200);
+    await pause(page, 700);
 
-    // Credit cards hub
-    await page.goto(url + "/credit-cards.html");
-    await pause(page, 1200);
-    await page.locator('.main-nav__item[data-menu="cards"] .main-nav__btn').hover();
-    await pause(page, 800);
-    await page.goto(url + "/latest-offers.html");
-    await pause(page, 1000);
+    // Savings accounts: product cards + rate tiers
+    await scrollThrough("savings-accounts.html", 3);
 
-    // Home loans + refinancing
-    await page.goto(url + "/home-loans.html");
-    await pause(page, 1200);
-    await page.goto(url + "/refinancing.html");
-    await pause(page, 1200);
+    // Term deposits: rate table
+    await scrollThrough("term-deposits.html", 2);
 
-    // Business section
-    await page.goto(url + "/business.html");
-    await pause(page, 1200);
-    await page.goto(url + "/business-accounts.html");
-    await pause(page, 1000);
+    // Home loans + refinancing comparison
+    await scrollThrough("home-loans.html", 3);
+    await scrollThrough("refinancing.html", 2);
 
-    // Corporate + insurance
-    await page.goto(url + "/corporate.html");
-    await pause(page, 1000);
-    await page.goto(url + "/insurance.html");
-    await pause(page, 1000);
-    await page.goto(url + "/travel-insurance.html");
-    await pause(page, 1000);
+    // Credit cards + latest offers + qantas comparison
+    await scrollThrough("credit-cards.html", 3);
+    await scrollThrough("latest-offers.html", 2);
+    await scrollThrough("qantas-rewards-cards.html", 2);
 
-    // Help, contact, find us
-    await page.goto(url + "/help-support.html");
-    await pause(page, 1000);
-    await page.goto(url + "/contact-us.html");
-    await pause(page, 1000);
-    await page.goto(url + "/find-us.html");
-    await pause(page, 1000);
+    // Personal loans
+    await scrollThrough("personal-loans.html", 2);
+
+    // Interest rates & fees: multiple tables
+    await scrollThrough("interest-rates-fees.html", 4);
+
+    // FX calculator: rates table
+    await scrollThrough("foreign-exchange-calculator.html", 2);
+
+    // Insurance product cards
+    await scrollThrough("travel-insurance.html", 2);
+    await scrollThrough("car-insurance.html", 2);
+
+    // Business loans & payments
+    await scrollThrough("business-loans.html", 2);
+    await scrollThrough("merchant-payments.html", 2);
+
+    // Find us: branch list
+    await scrollThrough("find-us.html", 3);
+
+    // Newsroom: news list
+    await scrollThrough("newsroom.html", 2);
+
+    // Fraud alerts: alert list
+    await scrollThrough("fraud-alerts.html", 2);
+
+    // Careers: stats + jobs
+    await scrollThrough("careers.html", 3);
+
+    // Shareholder centre: share price + dividends
+    await scrollThrough("shareholder-centre.html", 2);
 
     // Home page interactions: search, login, accordion
     await page.goto(url + "/index.html");
