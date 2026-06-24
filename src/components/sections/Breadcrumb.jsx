@@ -7,7 +7,9 @@ export default function Breadcrumb({ items }) {
   return (
     <nav className="bg-bg-tint border-b border-line py-[14px]" aria-label="Breadcrumb">
       <Container>
-        <ol className="flex flex-wrap gap-2 items-center text-[0.9rem] text-ink-soft">
+        {/* my-[1em] + pl-10 reproduce the browser's default <ol> margin/padding,
+            which the original CSS left intact (its reset only targeted <ul>). */}
+        <ol className="flex flex-wrap gap-2 items-center text-[0.9rem] text-ink-soft my-[1em] pl-10">
           {items.map((item, i) => {
             const isLast = i === items.length - 1;
             const sep = !isLast

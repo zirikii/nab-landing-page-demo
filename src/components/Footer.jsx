@@ -10,7 +10,9 @@ export default function Footer() {
         <div className="grid grid-cols-[repeat(4,1fr)_1.2fr] gap-8 pb-10 border-b border-[#3a3a3a] max-[1024px]:grid-cols-3 max-[880px]:grid-cols-2 max-[520px]:grid-cols-1">
           {footerColumns.map((col) => (
             <div key={col.title}>
-              <h3 className="text-white text-base mb-4">{col.title}</h3>
+              {/* leading-[1.2] matches the base heading line-height; Tailwind's
+                  text-base would otherwise force line-height 1.5. */}
+              <h3 className="text-white text-[1rem] leading-[1.2] mb-4">{col.title}</h3>
               <ul>
                 {col.links.map((l) => (
                   <li key={l.href} className="mb-2.5">
@@ -23,7 +25,9 @@ export default function Footer() {
             </div>
           ))}
 
-          <div className="flex flex-col items-start">
+          {/* Plain block (not flex) so the inline-block logo keeps its baseline
+              gap, matching the original .footer-col--social exactly. */}
+          <div>
             <SmartLink
               href="index.html"
               className="inline-block bg-white p-2.5 rounded-[10px] mb-[18px]"

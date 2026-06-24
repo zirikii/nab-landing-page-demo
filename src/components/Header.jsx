@@ -196,7 +196,7 @@ export default function Header({ audience = "personal" }) {
                       <li key={item.label}>
                         <SmartLink
                           href={item.href}
-                          className="font-semibold text-base text-white bg-none border-none py-6 px-4 cursor-pointer inline-flex items-center gap-1.5 border-b-[3px] border-transparent hover:text-nab-red hover:no-underline"
+                          className="font-semibold text-base text-white bg-none border-0 border-solid border-b-[3px] border-b-transparent py-6 px-4 cursor-pointer inline-flex items-center gap-1.5 hover:text-nab-red hover:no-underline"
                         >
                           {item.label}
                         </SmartLink>
@@ -213,8 +213,8 @@ export default function Header({ audience = "personal" }) {
                       }}
                     >
                       <button
-                        className={`font-semibold text-base bg-none border-none py-6 px-4 cursor-pointer inline-flex items-center gap-1.5 border-b-[3px] ${
-                          isOpen ? "text-nab-red border-b-nab-red" : "text-white border-transparent hover:text-nab-red"
+                        className={`font-semibold text-base bg-none border-0 border-solid border-b-[3px] py-6 px-4 cursor-pointer inline-flex items-center gap-1.5 ${
+                          isOpen ? "text-nab-red border-b-nab-red" : "text-white border-b-transparent hover:text-nab-red"
                         }`}
                         aria-expanded={isOpen}
                         aria-controls={menu.id}
