@@ -4,8 +4,10 @@ import SmartLink from "./SmartLink.jsx";
 // The leading "btn" token is a non-styling marker so the data-layer click
 // delegate (see App.jsx) can identify CTA clicks exactly like the original
 // js/main.js (`id = className.split(" ")[0]`).
+// No border-color in BASE — each variant sets its own so it doesn't get
+// overridden by a base border-transparent in the cascade.
 const BASE =
-  "btn inline-flex items-center justify-center gap-2 font-bold rounded-full border-2 border-transparent cursor-pointer no-underline transition-colors duration-150";
+  "btn inline-flex items-center justify-center gap-2 font-bold rounded-full border-2 cursor-pointer no-underline transition-colors duration-150";
 
 const VARIANTS = {
   primary:
@@ -14,7 +16,7 @@ const VARIANTS = {
     "py-3 px-[22px] bg-white text-nab-red border-nab-red hover:bg-[#fff5f5]",
   ghost:
     "py-3 px-[22px] bg-transparent text-nab-red border-nab-red hover:bg-[#fff5f5]",
-  link: "py-3 px-1.5 bg-transparent text-nab-red hover:underline",
+  link: "py-3 px-1.5 bg-transparent text-nab-red border-transparent hover:underline",
 };
 
 export default function Button({ href, label, children, variant = "primary", block = false, className = "", ...rest }) {

@@ -258,8 +258,11 @@ export default function Header({ audience = "personal" }) {
                   aria-expanded={loginOpen}
                   aria-controls="loginPanel"
                   data-dl-id="login-open"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
+                    // No stopPropagation: the outside-click handler already
+                    // ignores clicks inside loginWrap, and letting the event
+                    // bubble lets the global click tracker also fire — matching
+                    // the original site's (double) login-open analytics event.
                     const next = !loginOpen;
                     setLoginOpen(next);
                     if (next) pushClick("login-open", "Login");
@@ -318,15 +321,17 @@ export default function Header({ audience = "personal" }) {
             </div>
           )}
         </div>
-
-        {/* Mega overlay (desktop) */}
-        {!isMobile && openMenu && (
-          <div
-            className="fixed inset-0 top-header bg-black/35 z-[80]"
-            onClick={() => setOpenMenu(null)}
-          />
-        )}
       </header>
+
+      {/* Mega overlay (desktop) — sibling of <header> (not a child) so it sits
+          below the header in the stacking order and leaving the header into the
+          overlay triggers the close-on-mouseleave, matching the original. */}
+      {!isMobile && openMenu && (
+        <div
+          className="fixed inset-0 top-header bg-black/35 z-[80]"
+          onClick={() => setOpenMenu(null)}
+        />
+      )}
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} audience={audience} />
     </>
