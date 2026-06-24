@@ -1,18 +1,22 @@
-"use strict";
+// Records a Playwright walkthrough video of the React app. Builds the app (if
+// needed), serves the production build with `vite preview`, then navigates the
+// site exercising the mega menu, search, login, accordion and mobile menu.
 
-const { chromium } = require("playwright");
-const { spawn } = require("child_process");
-const http = require("http");
-const net = require("net");
-const path = require("path");
-const fs = require("fs");
+import { chromium } from "playwright";
+import { spawn, execSync } from "child_process";
+import http from "http";
+import net from "net";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const shotsDir = path.join(root, "shots");
 const videoDir = path.join(shotsDir, "walkthrough");
 
 const SERVER_HOST = "127.0.0.1";
-const SERVER_STARTUP_TIMEOUT_MS = 15000;
+const SERVER_STARTUP_TIMEOUT_MS = 30000;
 const SERVER_POLL_INTERVAL_MS = 100;
 
 function getAvailablePort() {
@@ -29,112 +33,54 @@ function getAvailablePort() {
 function waitForServer(url, timeoutMs) {
   const started = Date.now();
   const { hostname, port } = new URL(url);
-
   return new Promise((resolve, reject) => {
     const tryConnect = () => {
-      const req = http.get(
-        { hostname, port: Number(port), path: "/", timeout: 1000 },
-        (res) => {
-          res.resume();
-          resolve();
-        }
-      );
-
+      const req = http.get({ hostname, port: Number(port), path: "/", timeout: 1000 }, (res) => {
+        res.resume();
+        resolve();
+      });
       const retryOrFail = () => {
         if (Date.now() - started >= timeoutMs) {
-          reject(
-            new Error(
-              `HTTP server did not become ready at ${url} within ${timeoutMs}ms`
-            )
-          );
+          reject(new Error(`Preview server not ready at ${url} within ${timeoutMs}ms`));
           return;
         }
         setTimeout(tryConnect, SERVER_POLL_INTERVAL_MS);
       };
-
       req.on("error", retryOrFail);
       req.on("timeout", () => {
         req.destroy();
         retryOrFail();
       });
     };
-
     tryConnect();
   });
 }
 
 async function startServer() {
+  // Reuse an already-running preview server if PREVIEW_URL is provided.
+  if (process.env.PREVIEW_URL) {
+    await waitForServer(process.env.PREVIEW_URL, SERVER_STARTUP_TIMEOUT_MS);
+    return { proc: null, url: process.env.PREVIEW_URL };
+  }
+  if (!fs.existsSync(path.join(root, "dist", "index.html"))) {
+    console.log("dist/ not found — building…");
+    execSync("npm run build", { cwd: root, stdio: "inherit" });
+  }
   const port = await getAvailablePort();
   const url = `http://${SERVER_HOST}:${port}`;
-
-  return new Promise((resolve, reject) => {
-    let settled = false;
-    let stderr = "";
-
-    const proc = spawn("python3", ["-m", "http.server", String(port), "--bind", SERVER_HOST], {
-      cwd: root,
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-
-    const fail = (err) => {
-      if (settled) return;
-      settled = true;
-      try {
-        proc.kill();
-      } catch {
-        // Process may already be gone.
-      }
-      reject(err);
-    };
-
-    proc.on("error", (err) => {
-      fail(new Error(`Failed to start HTTP server: ${err.message}`));
-    });
-
-    proc.stderr.on("data", (chunk) => {
-      stderr += chunk.toString();
-    });
-
-    proc.on("exit", (code, signal) => {
-      if (settled) return;
-      const details = stderr.trim();
-      fail(
-        new Error(
-          `HTTP server exited before becoming ready (code ${code ?? "null"}, signal ${signal ?? "null"})${
-            details ? `: ${details}` : ""
-          }`
-        )
-      );
-    });
-
-    waitForServer(url, SERVER_STARTUP_TIMEOUT_MS)
-      .then(() => {
-        if (settled) return;
-        if (proc.exitCode !== null) {
-          const details = stderr.trim();
-          fail(
-            new Error(
-              `HTTP server exited before becoming ready (code ${proc.exitCode})${
-                details ? `: ${details}` : ""
-              }`
-            )
-          );
-          return;
-        }
-        settled = true;
-        resolve({ proc, url });
-      })
-      .catch(fail);
-  });
+  const proc = spawn(
+    "npx",
+    ["vite", "preview", "--port", String(port), "--host", SERVER_HOST],
+    { cwd: root, stdio: ["ignore", "pipe", "pipe"] }
+  );
+  await waitForServer(url, SERVER_STARTUP_TIMEOUT_MS);
+  return { proc, url };
 }
 
-async function pause(page, ms) {
-  await page.waitForTimeout(ms);
-}
+const pause = (page, ms) => page.waitForTimeout(ms);
 
 async function runWalkthrough() {
   fs.mkdirSync(videoDir, { recursive: true });
-
   const { proc, url } = await startServer();
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
@@ -142,90 +88,91 @@ async function runWalkthrough() {
     recordVideo: { dir: videoDir, size: { width: 1440, height: 900 } },
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15000);
+  page.setDefaultNavigationTimeout(20000);
 
   try {
     console.log("Starting walkthrough at", url);
 
-    // Home page + mega menu
-    await page.goto(url + "/index.html");
-    await page.waitForLoadState("networkidle");
+    // Home + mega menu
+    await page.goto(url + "/", { waitUntil: "load" });
     await pause(page, 1200);
-    await page.locator('.main-nav__item[data-menu="bank"] .main-nav__btn').hover();
+    await page.getByRole("button", { name: "Bank" }).first().hover();
     await pause(page, 1000);
-    await page.locator('#mega-bank a[href="savings-accounts.html"]').first().click();
-    await page.waitForLoadState("networkidle");
+    await page.getByRole("link", { name: "Savings accounts" }).first().click();
     await pause(page, 1200);
 
     // Credit cards hub
-    await page.goto(url + "/credit-cards.html");
-    await pause(page, 1200);
-    await page.locator('.main-nav__item[data-menu="cards"] .main-nav__btn').hover();
+    await page.goto(url + "/credit-cards");
+    await pause(page, 1000);
+    await page.getByRole("button", { name: "Credit cards" }).first().hover();
     await pause(page, 800);
-    await page.goto(url + "/latest-offers.html");
+    await page.goto(url + "/latest-offers");
     await pause(page, 1000);
 
     // Home loans + refinancing
-    await page.goto(url + "/home-loans.html");
-    await pause(page, 1200);
-    await page.goto(url + "/refinancing.html");
-    await pause(page, 1200);
+    await page.goto(url + "/home-loans");
+    await pause(page, 1000);
+    await page.goto(url + "/refinancing");
+    await pause(page, 1000);
 
-    // Business section
-    await page.goto(url + "/business.html");
-    await pause(page, 1200);
-    await page.goto(url + "/business-accounts.html");
+    // Business
+    await page.goto(url + "/business");
+    await pause(page, 1000);
+    await page.goto(url + "/business-accounts");
     await pause(page, 1000);
 
     // Corporate + insurance
-    await page.goto(url + "/corporate.html");
+    await page.goto(url + "/corporate");
     await pause(page, 1000);
-    await page.goto(url + "/insurance.html");
+    await page.goto(url + "/insurance");
     await pause(page, 1000);
-    await page.goto(url + "/travel-insurance.html");
+    await page.goto(url + "/travel-insurance");
     await pause(page, 1000);
 
     // Help, contact, find us
-    await page.goto(url + "/help-support.html");
+    await page.goto(url + "/help-support");
     await pause(page, 1000);
-    await page.goto(url + "/contact-us.html");
+    await page.goto(url + "/contact-us");
     await pause(page, 1000);
-    await page.goto(url + "/find-us.html");
+    await page.goto(url + "/find-us");
     await pause(page, 1000);
 
-    // Home page interactions: search, login, accordion
-    await page.goto(url + "/index.html");
+    // Home interactions: search, login, accordion
+    await page.goto(url + "/");
     await pause(page, 800);
-    await page.locator("#searchToggle").click();
-    await pause(page, 800);
-    await page.keyboard.press("Escape");
-    await pause(page, 400);
-    await page.locator("#loginToggle").click();
+    await page.getByRole("button", { name: "Search" }).first().click();
     await pause(page, 800);
     await page.keyboard.press("Escape");
     await pause(page, 400);
-    await page.locator(".accordion__btn").first().click();
+    await page.getByRole("button", { name: "Login" }).first().click();
+    await pause(page, 800);
+    await page.keyboard.press("Escape");
+    await pause(page, 400);
+    await page.getByRole("button", { name: /Interpreters available/i }).first().scrollIntoViewIfNeeded();
+    await page.getByRole("button", { name: /Interpreters available/i }).first().click();
     await pause(page, 800);
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.5));
     await pause(page, 600);
 
     // Mobile menu
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(url + "/index.html");
+    await page.goto(url + "/");
     await pause(page, 800);
-    await page.locator("#hamburger").click();
+    await page.getByRole("button", { name: "Menu" }).first().click();
     await pause(page, 1000);
-    await page.locator(".mobile-acc__btn").first().click();
+    await page.getByRole("button", { name: "Personal" }).first().click();
     await pause(page, 800);
-    await page.locator("#mobileMenuClose").click();
+    await page.getByRole("button", { name: "Close menu" }).first().click();
     await pause(page, 600);
 
-    // Sitemap + legal
+    // Sitemap + legal + international
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(url + "/sitemap.html");
+    await page.goto(url + "/sitemap");
     await pause(page, 1200);
-    await page.goto(url + "/privacy.html");
+    await page.goto(url + "/privacy");
     await pause(page, 1000);
-    await page.goto(url + "/international.html");
+    await page.goto(url + "/international");
     await pause(page, 1000);
 
     await page.screenshot({ path: path.join(shotsDir, "walkthrough-final.png"), fullPage: false });
@@ -233,7 +180,7 @@ async function runWalkthrough() {
   } finally {
     await context.close();
     await browser.close();
-    proc.kill();
+    if (proc) proc.kill();
 
     const videos = fs.readdirSync(videoDir).filter((f) => f.endsWith(".webm"));
     if (videos.length) {
@@ -242,9 +189,7 @@ async function runWalkthrough() {
       if (fs.existsSync(dest)) fs.unlinkSync(dest);
       fs.renameSync(src, dest);
       console.log("Video saved to:", dest);
-
       try {
-        const { execSync } = require("child_process");
         execSync(
           `ffmpeg -y -i "${dest}" -c:v libx264 -pix_fmt yuv420p "${path.join(shotsDir, "walkthrough-demo.mp4")}"`,
           { stdio: "pipe" }

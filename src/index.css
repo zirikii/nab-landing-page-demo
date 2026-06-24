@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================================
+   Base element styles ported 1:1 from the original css/styles.css
+   so typography/spacing match the static site exactly. These sit
+   on top of Tailwind's preflight reset.
+   =========================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: theme("fontFamily.sans");
+    color: #1a1a1a;
+    background: #ffffff;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0 0 0.4em;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0 0 1em;
+  }
+
+  a {
+    color: #c80000;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
