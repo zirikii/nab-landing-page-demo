@@ -2,6 +2,8 @@
 
 const { chromium } = require("playwright");
 const { spawn } = require("child_process");
+const http = require("http");
+const net = require("net");
 const path = require("path");
 const fs = require("fs");
 
@@ -9,14 +11,120 @@ const root = path.join(__dirname, "..");
 const shotsDir = path.join(root, "shots");
 const videoDir = path.join(shotsDir, "walkthrough");
 
-async function startServer() {
+const SERVER_HOST = "127.0.0.1";
+const SERVER_STARTUP_TIMEOUT_MS = 15000;
+const SERVER_POLL_INTERVAL_MS = 100;
+
+function getAvailablePort() {
   return new Promise((resolve, reject) => {
-    const proc = spawn("python3", ["-m", "http.server", "3456"], {
-      cwd: root,
-      stdio: "pipe",
+    const server = net.createServer();
+    server.listen(0, SERVER_HOST, () => {
+      const port = server.address().port;
+      server.close((err) => (err ? reject(err) : resolve(port)));
     });
-    setTimeout(() => resolve({ proc, url: "http://127.0.0.1:3456" }), 1500);
-    proc.on("error", reject);
+    server.on("error", reject);
+  });
+}
+
+function waitForServer(url, timeoutMs) {
+  const started = Date.now();
+  const { hostname, port } = new URL(url);
+
+  return new Promise((resolve, reject) => {
+    const tryConnect = () => {
+      const req = http.get(
+        { hostname, port: Number(port), path: "/", timeout: 1000 },
+        (res) => {
+          res.resume();
+          resolve();
+        }
+      );
+
+      const retryOrFail = () => {
+        if (Date.now() - started >= timeoutMs) {
+          reject(
+            new Error(
+              `HTTP server did not become ready at ${url} within ${timeoutMs}ms`
+            )
+          );
+          return;
+        }
+        setTimeout(tryConnect, SERVER_POLL_INTERVAL_MS);
+      };
+
+      req.on("error", retryOrFail);
+      req.on("timeout", () => {
+        req.destroy();
+        retryOrFail();
+      });
+    };
+
+    tryConnect();
+  });
+}
+
+async function startServer() {
+  const port = await getAvailablePort();
+  const url = `http://${SERVER_HOST}:${port}`;
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let stderr = "";
+
+    const proc = spawn("python3", ["-m", "http.server", String(port), "--bind", SERVER_HOST], {
+      cwd: root,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+
+    const fail = (err) => {
+      if (settled) return;
+      settled = true;
+      try {
+        proc.kill();
+      } catch {
+        // Process may already be gone.
+      }
+      reject(err);
+    };
+
+    proc.on("error", (err) => {
+      fail(new Error(`Failed to start HTTP server: ${err.message}`));
+    });
+
+    proc.stderr.on("data", (chunk) => {
+      stderr += chunk.toString();
+    });
+
+    proc.on("exit", (code, signal) => {
+      if (settled) return;
+      const details = stderr.trim();
+      fail(
+        new Error(
+          `HTTP server exited before becoming ready (code ${code ?? "null"}, signal ${signal ?? "null"})${
+            details ? `: ${details}` : ""
+          }`
+        )
+      );
+    });
+
+    waitForServer(url, SERVER_STARTUP_TIMEOUT_MS)
+      .then(() => {
+        if (settled) return;
+        if (proc.exitCode !== null) {
+          const details = stderr.trim();
+          fail(
+            new Error(
+              `HTTP server exited before becoming ready (code ${proc.exitCode})${
+                details ? `: ${details}` : ""
+              }`
+            )
+          );
+          return;
+        }
+        settled = true;
+        resolve({ proc, url });
+      })
+      .catch(fail);
   });
 }
 
