@@ -15,6 +15,11 @@
     }
   }
 
+  const copyrightYear = document.getElementById("copyrightYear");
+  if (copyrightYear) {
+    copyrightYear.textContent = String(new Date().getFullYear());
+  }
+
   /* ---------- Mega menu ---------- */
   function closeAllMenus(except) {
     navItems.forEach((item) => {

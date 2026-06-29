@@ -132,6 +132,15 @@ async function pause(page, ms) {
   await page.waitForTimeout(ms);
 }
 
+async function assertFooterYear(page) {
+  const expectedText = `© ${new Date().getFullYear()} National Australia Bank Limited.`;
+  const footerText = await page.locator(".footer-legal p").innerText();
+
+  if (!footerText.includes(expectedText)) {
+    throw new Error(`Expected footer copyright text to include "${expectedText}", got "${footerText}"`);
+  }
+}
+
 async function runWalkthrough() {
   fs.mkdirSync(videoDir, { recursive: true });
 
@@ -149,6 +158,7 @@ async function runWalkthrough() {
     // Home page + mega menu
     await page.goto(url + "/index.html");
     await page.waitForLoadState("networkidle");
+    await assertFooterYear(page);
     await pause(page, 1200);
     await page.locator('.main-nav__item[data-menu="bank"] .main-nav__btn').hover();
     await pause(page, 1000);
@@ -222,6 +232,7 @@ async function runWalkthrough() {
     // Sitemap + legal
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(url + "/sitemap.html");
+    await assertFooterYear(page);
     await pause(page, 1200);
     await page.goto(url + "/privacy.html");
     await pause(page, 1000);
