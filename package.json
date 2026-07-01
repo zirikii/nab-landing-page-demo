@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "node scripts/build.js",
+    "test:unit": "node scripts/login-button.test.js",
     "test:walkthrough": "node scripts/walkthrough.js",
-    "test": "npm run build && npm run test:walkthrough"
+    "test": "npm run build && npm run test:unit && npm run test:walkthrough"
   },
   "keywords": [],
   "author": "",
