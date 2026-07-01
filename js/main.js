@@ -125,6 +125,33 @@
   const loginToggle = document.getElementById("loginToggle");
   const loginPanel = document.getElementById("loginPanel");
   if (loginToggle && loginPanel) {
+    const loginStates = {
+      idle: { label: "Login", busy: false, disabled: false },
+      loading: { label: "Loading...", busy: true, disabled: true },
+      success: { label: "Login successful", busy: false, disabled: false },
+      error: { label: "Login error", busy: false, disabled: false },
+    };
+
+    function setLoginState(state) {
+      const nextState = loginStates[state] ? state : "idle";
+      const config = loginStates[nextState];
+
+      loginToggle.dataset.state = nextState;
+      loginToggle.textContent = config.label;
+      loginToggle.setAttribute("aria-busy", String(config.busy));
+      loginToggle.disabled = config.disabled;
+    }
+
+    setLoginState("idle");
+    window.NabLoginButton = {
+      getState: () => loginToggle.dataset.state || "idle",
+      setState: setLoginState,
+    };
+
+    document.addEventListener("nab:login-button-state", (e) => {
+      setLoginState(e.detail && e.detail.state);
+    });
+
     loginToggle.addEventListener("click", (e) => {
       e.stopPropagation();
       const open = loginPanel.hidden;
